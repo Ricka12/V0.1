@@ -11,8 +11,10 @@ double mid(studentas& temp);
 
 int stud_sk;
 int paz_sk;
+int atsitiktinai = 0;
 
 int main() {
+	srand(time(NULL));
 	studentas* grupe=NULL;
 	int pildau = 0;
 	int Noriu_iseiti = 0;
@@ -32,7 +34,8 @@ int main() {
 			cout << "Iveskite skaiciu didesni uz 0" << endl;
 		}
 	} while (paz_sk <= 0);
-	
+	cout << "Ar norite kad pazymiai butu generuojami atsitiktinai(1 jei taip, 0 jei ne):  ";
+	cin >> atsitiktinai;
 	if (stud_sk > 0)
 	{
 		grupe = new studentas[stud_sk];
@@ -75,14 +78,30 @@ void pildymas(studentas& temp)
 {
 	cout << "Iveskite varda ir pavarde: ";
 	cin >> temp.vardas >> temp.pavarde;
-	cout << "Iveskite "<<paz_sk<<" pazymius: ";
-	temp.paz = new int[paz_sk];
-	for (int i = 0; i < paz_sk; i++)
+	if (atsitiktinai == 1)
 	{
-		cin >> temp.paz[i];
+		int randomsk;
+		temp.paz = new int[paz_sk];
+		for (int i = 0; i < paz_sk; i++)
+		{
+			randomsk = (rand() % 10) + 1;
+			temp.paz[i] = randomsk;
+		}
+		randomsk = (rand() % 10) + 1;
+		temp.egz = randomsk;
 	}
-	cout << "Iveskite egzamino pazymi: ";
-	cin >> temp.egz;
+	else
+	{
+		cout << "Iveskite " << paz_sk << " pazymius: ";
+		temp.paz = new int[paz_sk];
+		for (int i = 0; i < paz_sk; i++)
+		{
+			cin >> temp.paz[i];
+		}
+		cout << "Iveskite egzamino pazymi: ";
+		cin >> temp.egz;
+	}
+
 
 }
 
@@ -90,7 +109,7 @@ void print(studentas& temp)
 {
 
 	cout << temp.vardas << setw(15) << temp.pavarde << setw(20);
-	cout << setw(20) << vid(temp) << setw(20) << mid(temp);
+	cout << setw(20) << vid(temp) << setw(20) << mid(temp)<<endl;
 	delete[] temp.paz;
 }
 double vid(studentas& temp)

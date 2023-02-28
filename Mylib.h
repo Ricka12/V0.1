@@ -3,6 +3,8 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <ctime>
+#include <cstdlib>
 using std::cout;
 using std::cin;
 using std::endl;
