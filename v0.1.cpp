@@ -1,31 +1,20 @@
-﻿#include "Mylib.h"
+#include "Mylib.h"
 struct studentas {
 	string vardas = "", pavarde = "";
-	int* paz = NULL;
+	int* paz = nullptr;
 	int egz = 0;
 };
 void pildymas(studentas& temp);
 void print(studentas& temp);
 double vid(studentas& temp);
 double mid(studentas& temp);
-
-int stud_sk;
 int paz_sk;
-int atsitiktinai = 0;
+int atsitiktinai;
+int main(){
+	studentas* grupe;
+	int n = 1;
+	int pildPab = 0;
 
-int main() {
-	srand(time(NULL));
-	studentas* grupe=NULL;
-	int pildau = 0;
-	int Noriu_iseiti = 0;
-	do {
-		cout << "Kiek studentu norite uzpildyti?(0 jei nezinote):  ";
-		cin >> stud_sk;
-		if (stud_sk < 0)
-		{
-			cout << "Iveskite teigiama skaiciu " << endl;
-		}
-	} while (stud_sk < 0);
 	do {
 		cout << "Kiek pazymiu turi studentai?():  ";
 		cin >> paz_sk;
@@ -34,43 +23,27 @@ int main() {
 			cout << "Iveskite skaiciu didesni uz 0" << endl;
 		}
 	} while (paz_sk <= 0);
+
 	cout << "Ar norite kad pazymiai butu generuojami atsitiktinai(1 jei taip, 0 jei ne):  ";
 	cin >> atsitiktinai;
-	if (stud_sk > 0)
-	{
-		grupe = new studentas[stud_sk];
-		for (int i = 0; i < stud_sk; i++)
-		{
-			pildymas(grupe[i]);
-		}
-	}
-	else {// Neveikia bet veiktu jei copy normaliai copijuotu pazymius man atrodo
-		stud_sk = 1;
-		studentas* temp = NULL;
-		do {
-			grupe = new studentas[stud_sk];
-			pildymas(grupe[pildau]);
-			cout << "Ar norite pratesti pildyma? jei taip spasukit bet ka isskirus 0 kitu atveju spauskit 0: " << endl;
-			cin >> Noriu_iseiti;
-			if(Noriu_iseiti==0)
-			{
-			temp = new studentas[stud_sk];
-			copy(grupe, grupe + stud_sk, temp);
-			delete[] grupe;
-			stud_sk = stud_sk + 1;
-			grupe = new studentas[stud_sk];
-			copy(temp, temp + stud_sk-1, grupe);
-			pildau++;
-			}
-		} while (Noriu_iseiti == 0);
-	}
-	cout << "sk" << stud_sk << " pildau" << pildau << endl;
-	cout << "Pavarde" << setw(15) << "Vardas" << setw(20) << "Galutinis(Vid.)" << " /" << " Galutinis(Med)" << endl;
 
-	for (int i = 0; i < stud_sk; i++)
+	grupe = new studentas[n];
+	do{
+	pildymas(grupe[n - 1]);
+	cout << "Ar norite kad butu pridedami studentai(1 taip, 0 ne): ";
+	cin >> pildPab;
+	if(pildPab == 1)
 	{
-		print(grupe[i]);
+	studentas* temp = new studentas[n];
+	copy(grupe, grupe + n, temp);
+	delete[] grupe;
+	grupe = new studentas[n + 1];
+	copy(temp, temp + n, grupe);
+	n++;
 	}
+	} while (pildPab == 1);
+	cout << setw(15) << "Vardas" << setw(20) << "Pavarde" << setw(20) << "Galutinis(Vid.)" << " /" << " Galutinis(Med)" << endl;
+	for (int i = 0; i < n; i++)	print(grupe[i]);
 	delete[] grupe;
 }
 
@@ -80,38 +53,49 @@ void pildymas(studentas& temp)
 	cin >> temp.vardas >> temp.pavarde;
 	if (atsitiktinai == 1)
 	{
-		int randomsk;
+		srand(time(NULL));
 		temp.paz = new int[paz_sk];
 		for (int i = 0; i < paz_sk; i++)
 		{
-			randomsk = (rand() % 10) + 1;
-			temp.paz[i] = randomsk;
+			temp.paz[i] = (rand() % 10) + 1;
 		}
-		randomsk = (rand() % 10) + 1;
-		temp.egz = randomsk;
+		temp.egz = (rand() % 10) + 1;
 	}
+
 	else
 	{
 		cout << "Iveskite " << paz_sk << " pazymius: ";
 		temp.paz = new int[paz_sk];
 		for (int i = 0; i < paz_sk; i++)
 		{
-			cin >> temp.paz[i];
+			do
+			{
+				cin >> temp.paz[i];
+				if (temp.paz[i] <= 0 || temp.paz[i] > 0)
+				{
+					cout << "Iveskite skaiciu tarp 1 ir 10" << endl;
+				}
+			} while (temp.paz[i] <= 0 || temp.paz[i] > 0);
 		}
 		cout << "Iveskite egzamino pazymi: ";
+		do
+		{
 		cin >> temp.egz;
+		if (temp.egz <= 0 || temp.egz > 0)
+		{
+			cout << "Iveskite skaiciu tarp 1 ir 10" << endl;
+		}
+		} while (temp.egz <= 0 || temp.egz > 0);
 	}
-
-
 }
-
 void print(studentas& temp)
 {
-
-	cout << temp.vardas << setw(15) << temp.pavarde << setw(20);
-	cout << setw(20) << vid(temp) << setw(20) << mid(temp)<<endl;
+	cout << setw(15) << temp.vardas << setw(20) << temp.pavarde;
+	cout << setw(20) << vid(temp) << setw(15) << mid(temp) << endl;
 	delete[] temp.paz;
 }
+
+
 double vid(studentas& temp)
 {
 	double rezultatas = 0;
@@ -126,32 +110,14 @@ double vid(studentas& temp)
 double mid(studentas& temp)
 {
 	double rezultatas = 0;
-	for (int i = 0; i < paz_sk; i++)
-	{
-		for (int j = i+1; j < paz_sk; j++)
-		{
-			if (temp.paz[i] > temp.paz[j])
-			{
-				swap(temp.paz[i], temp.paz[j]);
-			}
-		}
-	}
-	/*for (int i = 0; i < paz_sk; i++)
-	{
-		cout << "paz" << temp.paz[i] << endl;
-	}//Patikra*/
-
+	sort(&temp.paz[0], &temp.paz[0] + paz_sk);
 	if (paz_sk % 2 == 1)
 	{
-		//cout <<"as "<< temp.paz[paz_sk / 2 ] << " " << paz_sk / 2  << endl;//Patikra
-
-		rezultatas = 0.4 * temp.paz[paz_sk /2] + 0.6 * temp.egz;
+		rezultatas = 0.4 * temp.paz[paz_sk / 2] + 0.6 * temp.egz;
 	}
 
 	else {
-		//cout << "as " << temp.paz[paz_sk / 2] << " " << temp.paz[paz_sk / 2 - 1] << " " << 1.0 * ((temp.paz[paz_sk / 2] + temp.paz[paz_sk / 2 - 1]) / 2.0) << endl;//Patikra
-
-		rezultatas = 0.4 * ((temp.paz[paz_sk / 2 ] + temp.paz[paz_sk / 2-1]) / 2.0) + 0.6 * temp.egz;
+		rezultatas = 0.4 * ((temp.paz[paz_sk / 2] + temp.paz[paz_sk / 2 - 1]) / 2.0) + 0.6 * temp.egz;
 	}
 
 	return rezultatas;
