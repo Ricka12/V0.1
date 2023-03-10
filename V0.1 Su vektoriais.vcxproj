@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a8549e9e-dc38-4498-90a5-274d55ff3cf7}</ProjectGuid>
-    <RootNamespace>Perdarimas</RootNamespace>
+    <ProjectGuid>{4aa0dbc8-3a2b-48f7-be70-9dac02932f1c}</ProjectGuid>
+    <RootNamespace>V01Suvektoriais</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="v0.1.cpp" />
+    <ClCompile Include="V0.1 Su vektoriais.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mylib.h" />
